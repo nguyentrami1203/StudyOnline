@@ -8,7 +8,7 @@ use App\Models\User;
 use App\Http\Controllers\ExamController;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('tranggioithieu');
 });
 
 Route::get('/dashboard', function () {
