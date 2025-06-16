@@ -1,0 +1,21 @@
+.K1 {
+    text-align: center;
+    width: auto;
+    margin: 0 auto;
+    font-size: 15px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-style: normal;
+    color: #30224d;
+    font-weight: 500;
+}
+
+#typingText {
+  font-family: 'Montserrat', sans-serif;
+  color: #3a7bd5;
+  font-style: normal;
+  font-size: 30px;
+  border-right: 2px solid #3a7bd5;
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+}

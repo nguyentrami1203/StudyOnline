@@ -14,11 +14,10 @@
             <nav>
                 <ul>
                     <li><a href="">Tính năng</a></li>
-                    <li><a href="">Kho đề</a></li>
                     <li><a href="">Tạo đề</a></li>
                     <li><a href="">Bảng giá</a></li>
                     <li><a href="">Liên hệ</a></li>
-                    <li><a href="" class="btn">Đăng nhập</a></li>
+                    <li><a href="http://localhost/StudyOnline/public/login" class="btn">Đăng nhập</a></li>
                 </ul>
            </nav>
            </div>
