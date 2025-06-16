@@ -41,3 +41,6 @@ class AdminController extends Controller
         ));
     }
 }
+
+
+// \App\Models\User::create(['name' => 'Admin', 'email' => 'admin@gmail.com', 'password' => bcrypt('password'), 'role' => 'admin']);
