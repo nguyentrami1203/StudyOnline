@@ -30,7 +30,7 @@
 
     <footer>
         <div class = "container2">
-            <div class = "K1">
+            <div class = "Kh1">
                 <img src="Images\test.png" alt="logo">
                 <p>Nền tảng thi trắc nghiệm online</p>
                 <hr class="purple-line">

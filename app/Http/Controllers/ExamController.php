@@ -15,7 +15,8 @@ class ExamController extends Controller
      */
     public function index()
     {
-        //
+       $exams = Exam::with('subject')->get();
+    return view('tranggioithieu', compact('exams'));
     }
 
     /**
@@ -37,7 +38,7 @@ class ExamController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Exam $exam)
+    public function showExam(Exam $exam)
     {
         if (!session()->has("exam_start_time_{$exam->id}")) {
             session(["exam_start_time_{$exam->id}" => now()]);

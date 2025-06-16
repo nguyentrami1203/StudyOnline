@@ -2,40 +2,42 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\Exam;
 use App\Models\Question;
 
 class QuestionSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        $exam = Exam::where('exam_code', 'MATH2025')->first();
+        $exams = Exam::all();
 
-        Question::create([
-            'exam_id' => $exam->id,
-            'question_order' => 1,
-            'content' => '1 + 1 bằng bao nhiêu?',
-            'option_a' => '1',
-            'option_b' => '2',
-            'option_c' => '3',
-            'option_d' => '4',
-            'correct_answer' => 'B',
-        ]);
+        foreach ($exams as $exam) {
+            for ($i = 1; $i <= 50; $i++) {
+                $a = rand(1, 20);
+                $b = rand(1, 20);
+                $correct = $a + $b;
 
-        Question::create([
-            'exam_id' => $exam->id,
-            'question_order' => 2,
-            'content' => '5 * 6 bằng bao nhiêu?',
-            'option_a' => '30',
-            'option_b' => '31',
-            'option_c' => '28',
-            'option_d' => '35',
-            'correct_answer' => 'A',
-        ]);
+                $options = [
+                    'A' => $correct,
+                    'B' => $correct + rand(1, 5),
+                    'C' => $correct - rand(1, 3),
+                    'D' => $correct + rand(6, 10),
+                ];
+                $shuffled = collect($options)->shuffle();
+                $correctOptionKey = $shuffled->search($correct);
+
+                Question::create([
+                    'exam_id' => $exam->id,
+                    'question_order' => $i,
+                    'content' => "$a + $b bằng bao nhiêu?",
+                    'option_a' => $shuffled->values()[0],
+                    'option_b' => $shuffled->values()[1],
+                    'option_c' => $shuffled->values()[2],
+                    'option_d' => $shuffled->values()[3],
+                    'correct_answer' => strtoupper(chr(65 + $correctOptionKey)), // A/B/C/D
+                ]);
+            }
+        }
     }
 }

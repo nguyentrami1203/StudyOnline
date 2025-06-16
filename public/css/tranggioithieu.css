@@ -1,21 +1,67 @@
+body {
+    background: #f8f9fa;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
 .K1 {
     text-align: center;
-    width: auto;
-    margin: 0 auto;
-    font-size: 15px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-style: normal;
-    color: #30224d;
+    font-size: 20px;
+    padding: 40px 10px;
+    background: linear-gradient(to right, #3a7bd5, #00d2ff);
+    color: white;
+    border-radius: 0 0 20px 20px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.K1 p {
+    margin: 10px 0;
+    font-size: 24px;
     font-weight: 500;
+    line-height: 1.2;
 }
 
 #typingText {
-  font-family: 'Montserrat', sans-serif;
-  color: #3a7bd5;
-  font-style: normal;
-  font-size: 30px;
-  border-right: 2px solid #3a7bd5;
-  display: inline-block;
-  white-space: nowrap;
-  overflow: hidden;
+    font-size: 36px;
+    font-weight: bold;
+    color: #fff;
+    border-right: 3px solid #fff;
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.exam-card {
+    display: flex;
+    flex-direction: row;        /* đảm bảo dàn ngang */
+    align-items: center;
+    justify-content: flex-start;
+    background: #ffffff;
+    border-radius: 12px;
+    margin: 20px auto;
+    padding: 20px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.08);
+    max-width: 900px;           /* tăng chiều rộng 1 chút nếu cần */
+    box-sizing: border-box;     /* giúp padding không làm tràn khung */
+    transition: transform 0.2s ease;
+}
+
+.exam-card:hover {
+    transform: translateY(-5px);
+}
+
+.exam-card img {
+    width: 150px;
+    height: auto;
+    flex-shrink: 0;            
+    border-radius: 10px;
+    object-fit: cover;
+    margin-right: 20px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+}
+
+.exam-info {
+    flex: 1;
+    min-width: 0;            
 }
