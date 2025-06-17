@@ -1,0 +1,66 @@
+/* Header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    padding: 10px 20px;
+    border-bottom: 1px solid #ddd;
+}
+.logo {
+    display: flex;
+    align-items: center;
+}
+.logo-img {
+    height: 40px;
+    margin-right: 10px;
+}
+.logo-text {
+    font-size: 24px;
+    font-weight: bold;
+}
+.search-bar input {
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    width: 300px;
+}
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.btn-error {
+    background-color: white;
+    color: red;
+    border: none;
+    font-weight: bold;
+}
+.btn-create {
+    background: linear-gradient(90deg, #6a11cb 0%, #2575fc 100%);
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 8px;
+    text-decoration: none;
+    cursor: pointer;
+}
+.avatar {
+    height: 40px;
+    border-radius: 50%;
+}
+
+/* Footer */
+.footer {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 20px;
+    border-top: 1px solid #ddd;
+    background: #f9f9f9;
+    margin-top: 40px;
+}
+.support {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}

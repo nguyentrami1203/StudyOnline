@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Exam;
 use Carbon\Carbon;
 use App\Models\ExamResult;
+use App\Models\Subject;
 use Illuminate\Support\Facades\Auth;
 
 class ExamController extends Controller
@@ -15,8 +16,20 @@ class ExamController extends Controller
      */
     public function index()
     {
-       $exams = Exam::with('subject')->get();
-    return view('tranggioithieu', compact('exams'));
+         // Lấy tất cả môn học và đề thi liên quan
+        $subjects = Subject::with('exams')->get();
+
+        // Group lại theo cấp học
+        $examsByLevel = $subjects->groupBy('level')->map(function ($subjects) {
+            return $subjects->map(function ($subject) {
+                return [
+                    'subject_name' => $subject->subject_name,
+                    'exams' => $subject->exams
+                ];
+            });
+        });
+
+        return view('tranggioithieu', compact('examsByLevel'));
     }
 
     /**

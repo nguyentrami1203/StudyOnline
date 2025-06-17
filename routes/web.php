@@ -3,28 +3,17 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
-use Illuminate\Support\Facades\Auth;
-use App\Models\User;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ExamController;
+use App\Http\Controllers\SubjectController;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
+// Trang chủ (danh sách đề thi)
 Route::get('/', [ExamController::class, 'index'])->name('home');
 
-// Trang dashboard
+// Tự động điều hướng dashboard theo role
 Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
-// Các route liên quan đến profile
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
-
-// Điều hướng theo role
-Route::get('/redirect-by-role', function () {
-    /** @var User $user */
     $user = Auth::user();
 
     if ($user->role === 'admin') {
@@ -32,7 +21,16 @@ Route::get('/redirect-by-role', function () {
     }
 
     return redirect()->route('user.dashboard');
-})->middleware(['auth', 'verified']);
+})->middleware(['auth', 'verified'])->name('dashboard');
+// Giao diện làm bài thi (chỉ cho người đăng nhập)
+Route::get('/exams/{exam}/take', [ExamController::class, 'take'])
+    ->middleware('auth')
+    ->name('exams.take');
+
+// Nộp bài thi (cũng cần đăng nhập)
+Route::post('/exams/{exam}/submit', [ExamController::class, 'submit'])
+    ->middleware('auth')
+    ->name('exams.submit');
 
 // Trang dashboard cho admin
 Route::get('/admin/dashboard', [AdminController::class, 'index'])
@@ -40,8 +38,15 @@ Route::get('/admin/dashboard', [AdminController::class, 'index'])
     ->name('admin.dashboard');
 
 // Trang dashboard cho user
-Route::middleware(['auth'])->group(function () {
-    Route::get('/user/dashboard', [UserController::class, 'dashboard'])->name('user.dashboard');
+Route::get('/user/dashboard', [UserController::class, 'dashboard'])
+    ->middleware(['auth'])
+    ->name('user.dashboard');
+
+// Các route liên quan đến profile
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
 // Hiển thị chi tiết 1 đề thi (dùng để xử lý nút "Làm bài")
@@ -56,4 +61,6 @@ Route::post('/exams/{exam}/submit', [ExamController::class, 'submit'])->name('ex
 // Lịch sử làm bài (nếu bạn có)
 Route::get('/exam/history', [ExamController::class, 'history'])->name('exam.history');
 
+
+// Route auth mặc định
 require __DIR__.'/auth.php';

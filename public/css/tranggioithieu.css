@@ -1,29 +1,32 @@
+/* Reset đơn giản */
 body {
-    background: #f8f9fa;
+    background: #f4f6f8;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
     padding: 0;
+    color: #333;
 }
 
+/* Phần đầu trang */
 .K1 {
     text-align: center;
     font-size: 20px;
-    padding: 40px 10px;
-    background: linear-gradient(to right, #3a7bd5, #00d2ff);
+    padding: 50px 20px;
+    background: linear-gradient(120deg, #4e54c8, #8f94fb);
     color: white;
-    border-radius: 0 0 20px 20px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    border-radius: 0 0 30px 30px;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.1);
 }
 
 .K1 p {
-    margin: 10px 0;
-    font-size: 24px;
+    margin: 12px 0;
+    font-size: 26px;
     font-weight: 500;
-    line-height: 1.2;
+    line-height: 1.4;
 }
 
 #typingText {
-    font-size: 36px;
+    font-size: 38px;
     font-weight: bold;
     color: #fff;
     border-right: 3px solid #fff;
@@ -32,36 +35,99 @@ body {
     overflow: hidden;
 }
 
+/* Danh sách đề thi - Vertical layout */
+.exam-list {
+    display: block;
+    padding: 10px 20px;
+}
+
+/* Thẻ đề thi - Smaller and shorter */
 .exam-card {
     display: flex;
-    flex-direction: row;        /* đảm bảo dàn ngang */
+    flex-direction: row;
     align-items: center;
-    justify-content: flex-start;
-    background: #ffffff;
-    border-radius: 12px;
-    margin: 20px auto;
-    padding: 20px;
-    box-shadow: 0 8px 16px rgba(0,0,0,0.08);
-    max-width: 900px;           /* tăng chiều rộng 1 chút nếu cần */
-    box-sizing: border-box;     /* giúp padding không làm tràn khung */
-    transition: transform 0.2s ease;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+    padding: 10px; /* Reduced padding */
+    max-width: 700px; /* Reduced width */
+    margin: 5px auto; /* Reduced margin to bring closer to text */
+    transition: all 0.3s ease;
+    height: 120px; /* Fixed height to shorten card */
 }
 
 .exam-card:hover {
-    transform: translateY(-5px);
+    transform: translateY(-6px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
 }
 
 .exam-card img {
-    width: 150px;
+    width: 100px; /* Reduced image size */
     height: auto;
-    flex-shrink: 0;            
-    border-radius: 10px;
+    border-radius: 12px;
+    margin-right: 15px; /* Reduced margin */
     object-fit: cover;
-    margin-right: 20px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
 }
 
+/* Nội dung trong thẻ đề thi */
 .exam-info {
     flex: 1;
-    min-width: 0;            
+}
+
+.exam-info h5 {
+    font-size: 18px; /* Reduced font size */
+    font-weight: 600;
+    margin-bottom: 5px; /* Reduced margin */
+    color: #2b2b2b;
+}
+
+.exam-info p {
+    font-size: 14px; /* Reduced font size */
+    color: #555;
+    margin-bottom: 5px; /* Reduced margin */
+}
+
+/* Nút làm bài */
+.btn {
+    display: inline-block;
+    background: #4e54c8;
+    color: white;
+    padding: 6px 12px; /* Reduced padding */
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 14px; /* Reduced font size */
+    transition: background 0.3s ease;
+}
+
+.btn:hover {
+    background: #3b41a1;
+}
+
+/* Tiêu đề cấp học và môn học - Enhanced styling */
+h2 {
+    margin-left: 20px;
+    color: #333;
+    font-size: 28px;
+    margin-top: 40px;
+}
+
+h4 {
+    margin-left: 20px;
+    color: #2c3e50;
+    font-size: 24px;
+    font-weight: 700;
+    margin-top: 10px; /* Reduced margin to bring closer */
+    text-transform: uppercase;
+}
+
+/* Specific highlighting for subjects */
+h4:contains("Toán"),
+h4:contains("Văn"),
+h4:contains("Tiếng Anh") {
+    color: #e74c3c;
+    background: #f9ebea;
+    padding: 5px 10px;
+    border-radius: 5px;
+    display: inline-block;
 }

@@ -1,5 +1,6 @@
 @extends('layout')
 <link rel="stylesheet" href="{{ asset('css/tranggioithieu.css') }}">
+
 @section('content')
 <div class="K1">
     <p>Tạo đề đơn giản, học tập dễ dàng</p>
@@ -11,9 +12,9 @@
     const text = "Welcome to StudyOnline";
     let i = 0;
     let isDeleting = false;
-    const speed = 100; 
-    const eraseSpeed = 50; 
-    const waitTime = 1000; 
+    const speed = 100;
+    const eraseSpeed = 50;
+    const waitTime = 1000;
     const element = document.getElementById("typingText");
 
     function typeEffect() {
@@ -34,14 +35,23 @@
     typeEffect();
 </script>
 
-@foreach ($exams as $exam)
-    <div class="exam-card">
-        <img src="{{ asset('Images/artthi.png') }}" alt="exam image">
-        <div class="exam-info">
-            <h3>Thi thử trắc nghiệm ôn tập môn {{ $exam->subject->subject_name }} - Đề #{{ $exam->id }}</h3>
-            <p>Đề số {{ $exam->id }} thuộc môn {{ $exam->subject->subject_name }} với thời gian làm bài {{ $exam->duration_minutes }} phút.</p>
-            <a href="{{ route('exams.show', $exam->id) }}" class="btn">Làm bài</a>
+@foreach($examsByLevel as $level => $subjects)
+    <h2 class="text-2xl font-bold my-6 ml-4">{{ $level }}</h2>
+    @foreach($subjects as $subject)
+    <h4 class="highlight-subject">{{ $subject['subject_name'] }}</h4>        <div class="exam-list ml-8">
+            @foreach($subject['exams'] as $index => $exam)
+                <div class="exam-card">
+                    <img src="{{ asset('Images/artthi.png') }}" alt="Exam image">
+                    <div class="exam-info">
+                        <h5 class="font-semibold text-lg mb-2">
+                            Thi thử trắc nghiệm ôn tập môn {{ $subject['subject_name'] }} - Đề #{{ $index + 1 }}
+                        </h5>
+                        <p>Đề số {{ $exam->id }} với thời gian làm bài {{ $exam->duration_minutes }} phút.</p>
+                        <a href="{{ route('login') }}" class="btn btn-primary">Làm bài</a>
+                    </div>
+                </div>
+            @endforeach
         </div>
-    </div>
+    @endforeach
 @endforeach
 @endsection
