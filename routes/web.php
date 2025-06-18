@@ -58,8 +58,11 @@ Route::get('/exams/{exam}/take', [ExamController::class, 'take'])->name('exams.t
 // Nộp bài thi
 Route::post('/exams/{exam}/submit', [ExamController::class, 'submit'])->name('exams.submit');
 
-// Lịch sử làm bài (nếu bạn có)
+// Lịch sử làm bài 
 Route::get('/exam/history', [ExamController::class, 'history'])->name('exam.history');
+
+Route::get('/exam/result/{id}', [ExamController::class, 'viewResult'])->name('exam.result.detail');
+
 
 
 // Route auth mặc định

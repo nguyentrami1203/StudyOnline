@@ -16,7 +16,7 @@
                 <li><a href="#"><i class="icon">🧭</i> Khám phá đề thi</a></li>
                 <li><a href="#"><i class="icon">🏠</i> Thư viện của tôi</a></li>
                 <li><a href="#"><i class="icon">⏱</i> Truy cập gần đây</a></li>
-                <li><a href="#"><i class="icon">📝</i> Kết quả thi của tôi</a></li>
+                <li><a href="{{ route('exam.history') }}"><i class="icon">📝</i> Kết quả thi của tôi</a></li>
                 <li><a href="#"><i class="icon">🏅</i> BXH thi đua <span style="color: orange;">🔥</span></a></li>
             </ul>
         </div>
