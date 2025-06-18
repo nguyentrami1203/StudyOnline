@@ -17,7 +17,7 @@
         </p>
     </div>
 
-    <form id="exam-form" method="POST" action="{{ route('exam.submit', $exam->id) }}">
+    <form id="exam-form" method="POST" action="{{ route('exams.submit', $exam->id) }}">
         @csrf
         <input type="hidden" id="end-time" value="{{ $endTime->timestamp }}">
         <input type="hidden" id="duration" value="{{ $endTime->timestamp - $startTime->timestamp }}">
@@ -53,37 +53,39 @@
     const endTime = parseInt(document.getElementById('end-time').value) * 1000;
     const duration = parseInt(document.getElementById('duration').value) * 1000;
     const progressBar = document.getElementById('progress-bar');
+    const countdownDisplay = document.getElementById('countdown');
+    const answeredCount = document.getElementById('answered-count');
+    const form = document.getElementById('exam-form');
 
     function updateCountdown() {
-        const now = new Date().getTime();
-        const distance = endTime - now;
-        const percentLeft = Math.max((distance / duration) * 100, 0);
+        const now = Date.now();
+        const remaining = endTime - now;
+        const percentLeft = Math.max((remaining / duration) * 100, 0);
 
+        // Cập nhật thanh tiến trình
         progressBar.style.width = percentLeft + '%';
-
+        progressBar.classList.remove('bg-green-500', 'bg-yellow-500', 'bg-red-500');
         if (percentLeft < 20) {
-            progressBar.classList.remove('bg-green-500', 'bg-yellow-500');
             progressBar.classList.add('bg-red-500');
         } else if (percentLeft < 50) {
-            progressBar.classList.remove('bg-green-500', 'bg-red-500');
             progressBar.classList.add('bg-yellow-500');
         } else {
-            progressBar.classList.remove('bg-yellow-500', 'bg-red-500');
             progressBar.classList.add('bg-green-500');
         }
 
-        if (distance <= 0) {
-            document.getElementById('countdown').innerText = '00:00';
-            alert("⏰ Hết giờ! Hệ thống sẽ tự động nộp bài.");
+        // Cập nhật thời gian
+        if (remaining <= 0) {
+            countdownDisplay.innerText = '00:00';
             clearInterval(interval);
-            document.getElementById('exam-form').submit();
+            alert("⏰ Hết giờ! Hệ thống sẽ tự động nộp bài.");
+            form.submit();
         } else {
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-            document.getElementById('countdown').innerText =
-                `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            const minutes = Math.floor(remaining / (1000 * 60));
+            const seconds = Math.floor((remaining % (1000 * 60)) / 1000);
+            countdownDisplay.innerText = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
 
-            if (distance < 5 * 60 * 1000 && !window.warned) {
+            // Cảnh báo khi còn < 5 phút
+            if (remaining < 5 * 60 * 1000 && !window.warned) {
                 alert("⚠️ Bạn chỉ còn chưa đầy 5 phút!");
                 window.warned = true;
             }
@@ -91,8 +93,8 @@
     }
 
     function updateAnsweredCount() {
-        const answered = document.querySelectorAll('input[type="radio"]:checked').length;
-        document.getElementById('answered-count').innerText = answered;
+        const count = document.querySelectorAll('input[type="radio"]:checked').length;
+        answeredCount.innerText = count;
     }
 
     document.querySelectorAll('input[type="radio"]').forEach(input => {
@@ -104,3 +106,4 @@
     const interval = setInterval(updateCountdown, 1000);
 </script>
 @endsection
+

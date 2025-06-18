@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use App\Models\ExamResult;
 use App\Models\Subject;
 use Illuminate\Support\Facades\Auth;
+use App\Models\ExamAnswer;
 
 class ExamController extends Controller
 {
@@ -87,10 +88,49 @@ class ExamController extends Controller
         //
     }
 
+    public function history()
+    {
+        $results = ExamResult::with('exam')
+            ->where('user_id', Auth::id())
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('exams.history', compact('results'));
+    }
+
+    public function viewResult($id)
+    {
+        $result = ExamResult::with(['exam', 'answers.question'])->findOrFail($id);
+
+        // Tính tổng số câu
+        $total = $result->exam->questions->count();
+
+        return view('exams.result_detail', compact('result', 'total'));
+    }
+
     public function take(Exam $exam)
     {
+        session()->forget("exam_start_time_{$exam->id}");
+        session(["exam_start_time_{$exam->id}" => now()]);
+
+        $startTime = Carbon::parse(session("exam_start_time_{$exam->id}"));
+        $endTime = $startTime->copy()->addMinutes($exam->duration_minutes);
+
         $questions = $exam->questions()->orderBy('question_order')->get();
-        return view('exams.take', compact('exam', 'questions'));
+
+        $count = ExamResult::where('user_id', auth()->id())->where('exam_id', $exam->id)->count();
+        if ($count >= 3) {
+            return redirect()->back()->with('error', 'Bạn đã làm bài thi này quá số lần cho phép.');
+        }
+
+        $startTimestamp = Carbon::parse($startTime)->timestamp;
+        $endTimestamp = Carbon::parse($endTime)->timestamp;
+        $duration = $endTimestamp - $startTimestamp;
+
+        return view('exams.take', compact(
+            'exam', 'questions', 'startTime', 'endTime',
+            'startTimestamp', 'endTimestamp', 'duration'
+        ));
     }
 
     public function submit(Request $request, Exam $exam)
@@ -98,18 +138,25 @@ class ExamController extends Controller
         $score = 0;
         $questions = $exam->questions;
 
+        // Tính điểm và thu thập dữ liệu câu trả lời
+        $answers = [];
         foreach ($questions as $question) {
             $userAnswer = $request->input("answers.{$question->id}");
+
             if ($userAnswer === $question->correct_answer) {
                 $score++;
             }
+
+            $answers[] = [
+                'question_id' => $question->id,
+                'selected_answer' => $userAnswer ?? '',
+            ];
         }
 
-        // Tính phần trăm điểm
         $percentage = round(($score / $questions->count()) * 100, 2);
 
-        // Lưu kết quả vào database
-        ExamResult::create([
+        // Lưu kết quả bài thi
+        $result = ExamResult::create([
             'user_id' => Auth::id(),
             'exam_id' => $exam->id,
             'score' => $score,
@@ -117,6 +164,16 @@ class ExamController extends Controller
             'percentage' => $percentage,
         ]);
 
+        // Lưu từng câu trả lời
+        foreach ($answers as $answer) {
+            ExamAnswer::create([
+                'exam_result_id' => $result->id,
+                'question_id' => $answer['question_id'],
+                'selected_answer' => $answer['selected_answer'],
+            ]);
+        }
+
         return view('exams.result', compact('score', 'questions', 'percentage'));
     }
+
 }
