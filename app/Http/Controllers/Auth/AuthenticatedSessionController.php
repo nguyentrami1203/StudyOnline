@@ -12,7 +12,7 @@ use Illuminate\View\View;
 class AuthenticatedSessionController extends Controller
 {
     /**
-     * Display the login view.
+     * Hiển thị giao diện đăng nhập.
      */
     public function create(): View
     {
@@ -20,37 +20,38 @@ class AuthenticatedSessionController extends Controller
     }
 
     /**
-     * Handle an incoming authentication request.
+     * Xử lý đăng nhập từ người dùng.
      */
     public function store(LoginRequest $request): RedirectResponse
     {
+        // Xác thực tài khoản
         $request->authenticate();
 
+        // Tạo lại session để bảo mật
         $request->session()->regenerate();
 
-        // Lấy user đang đăng nhập
+        // Lấy user sau khi đăng nhập
         $user = $request->user();
 
-        // Điều hướng theo role
+        // Chuyển hướng theo role
         if ($user->role === 'admin') {
-            return redirect()->route('admin.dashboard');
+            return redirect()->route('admin.dashboard'); // ví dụ: route đến trang quản trị
         } elseif ($user->role === 'user') {
-            return redirect()->route('user.dashboard');
+            return redirect()->route('user.dashboard'); // ví dụ: route đến giao diện người dùng
         }
 
-        // Fallback nếu không có role cụ thể
+        // Nếu chưa có role rõ ràng → quay về trang chủ
         return redirect('/');
     }
 
     /**
-     * Destroy an authenticated session.
+     * Đăng xuất người dùng và xóa session.
      */
     public function destroy(Request $request): RedirectResponse
     {
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();
-
         $request->session()->regenerateToken();
 
         return redirect('/');
