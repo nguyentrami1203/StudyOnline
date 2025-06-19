@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="max-w-4xl mx-auto py-8">
-    <a href="{{ route('exam.take', $result->exam->id) }}"
+    <a href="{{ route('exams.take', $result->exam->id) }}"
         class="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition mb-4">
         🔁 Làm lại đề thi
     </a>

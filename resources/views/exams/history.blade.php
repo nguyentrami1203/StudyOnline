@@ -16,6 +16,7 @@
                     <th class="py-3 px-4">Điểm</th>
                     <th class="py-3 px-4">Tỷ lệ (%)</th>
                     <th class="py-3 px-4">Thời gian</th>
+                    <th class="py-3 px-4">Chi tiết</th>
                 </tr>
             </thead>
             <tbody class="text-gray-600">
@@ -24,8 +25,16 @@
                     <td class="py-2 px-4">{{ $result->exam->exam_code }}</td>
                     <td class="py-2 px-4">{{ $result->exam->title ?? '---' }}</td>
                     <td class="py-2 px-4">{{ $result->score }} / {{ $result->total }}</td>
-                    <td class="py-2 px-4">{{ $result->percentage }}%</td>
+                    @php
+                        $color = $result->percentage >= 80 ? 'text-green-600' : ($result->percentage >= 50 ? 'text-yellow-600' : 'text-red-600');
+                    @endphp
+                    <td class="py-2 px-4 {{ $color }}">{{ $result->percentage }}%</td>
                     <td class="py-2 px-4">{{ $result->created_at->format('d/m/Y H:i') }}</td>
+                    <td class="py-2 px-4">
+                        <a href="{{ route('exam.result.detail', $result->id) }}" class="text-blue-600 hover:underline">
+                            Xem chi tiết
+                        </a>
+                    </td>
                 </tr>
                 @endforeach
             </tbody>

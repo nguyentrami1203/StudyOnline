@@ -19,8 +19,8 @@
 
     <form id="exam-form" method="POST" action="{{ route('exams.submit', $exam->id) }}">
         @csrf
-        <input type="hidden" id="end-time" value="{{ $endTime->timestamp }}">
-        <input type="hidden" id="duration" value="{{ $endTime->timestamp - $startTime->timestamp }}">
+        <input type="hidden" id="end-time" value="{{ $endTimestamp }}">
+        <input type="hidden" id="duration" value="{{ $duration }}">
 
         @foreach($exam->questions as $index => $question)
         <div class="mb-6 border-b pb-4" id="question-{{ $question->id }}">
@@ -50,6 +50,7 @@
 
 @section('scripts')
 <script>
+document.addEventListener('DOMContentLoaded', function () {
     const endTime = parseInt(document.getElementById('end-time').value) * 1000;
     const duration = parseInt(document.getElementById('duration').value) * 1000;
     const progressBar = document.getElementById('progress-bar');
@@ -62,7 +63,6 @@
         const remaining = endTime - now;
         const percentLeft = Math.max((remaining / duration) * 100, 0);
 
-        // Cập nhật thanh tiến trình
         progressBar.style.width = percentLeft + '%';
         progressBar.classList.remove('bg-green-500', 'bg-yellow-500', 'bg-red-500');
         if (percentLeft < 20) {
@@ -73,10 +73,8 @@
             progressBar.classList.add('bg-green-500');
         }
 
-        // Cập nhật thời gian
         if (remaining <= 0) {
             countdownDisplay.innerText = '00:00';
-            clearInterval(interval);
             alert("⏰ Hết giờ! Hệ thống sẽ tự động nộp bài.");
             form.submit();
         } else {
@@ -84,7 +82,6 @@
             const seconds = Math.floor((remaining % (1000 * 60)) / 1000);
             countdownDisplay.innerText = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
 
-            // Cảnh báo khi còn < 5 phút
             if (remaining < 5 * 60 * 1000 && !window.warned) {
                 alert("⚠️ Bạn chỉ còn chưa đầy 5 phút!");
                 window.warned = true;
@@ -103,7 +100,8 @@
 
     updateAnsweredCount();
     updateCountdown();
-    const interval = setInterval(updateCountdown, 1000);
+    setInterval(updateCountdown, 1000);
+});
 </script>
 @endsection
 

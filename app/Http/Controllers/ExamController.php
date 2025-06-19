@@ -58,8 +58,8 @@ class ExamController extends Controller
             session(["exam_start_time_{$exam->id}" => now()]);
         }
 
-        $startTime = session("exam_start_time_{$exam->id}");
-        $endTime = Carbon::parse($startTime)->addMinutes($exam->duration_minutes);
+        $startTime = Carbon::parse(session("exam_start_time_{$exam->id}"));
+        $endTime = $startTime->copy()->addMinutes($exam->duration_minutes);
 
         return view('exam.take', compact('exam', 'startTime', 'endTime'));
     }
@@ -110,33 +110,46 @@ class ExamController extends Controller
 
     public function take(Exam $exam)
     {
-        session()->forget("exam_start_time_{$exam->id}");
-        session(["exam_start_time_{$exam->id}" => now()]);
+        // Nếu chưa có thời gian bắt đầu trong session thì đặt nó
+        if (!session()->has("exam_start_time_{$exam->id}")) {
+            session(["exam_start_time_{$exam->id}" => now()]);
+        }
 
         $startTime = Carbon::parse(session("exam_start_time_{$exam->id}"));
         $endTime = $startTime->copy()->addMinutes($exam->duration_minutes);
 
-        $questions = $exam->questions()->orderBy('question_order')->get();
+        // Kiểm tra số lần làm bài
+        $count = ExamResult::where('user_id', auth()->id())
+            ->where('exam_id', $exam->id)
+            ->count();
 
-        $count = ExamResult::where('user_id', auth()->id())->where('exam_id', $exam->id)->count();
         if ($count >= 3) {
             return redirect()->back()->with('error', 'Bạn đã làm bài thi này quá số lần cho phép.');
         }
 
-        $startTimestamp = Carbon::parse($startTime)->timestamp;
-        $endTimestamp = Carbon::parse($endTime)->timestamp;
+        // Lấy danh sách câu hỏi (đã sắp xếp theo thứ tự nếu cần)
+        $questions = $exam->questions()->orderBy('question_order')->get();
+
+        // Chuyển sang timestamp để truyền cho Blade
+        $startTimestamp = $startTime->timestamp;
+        $endTimestamp = $endTime->timestamp;
         $duration = $endTimestamp - $startTimestamp;
 
         return view('exams.take', compact(
-            'exam', 'questions', 'startTime', 'endTime',
-            'startTimestamp', 'endTimestamp', 'duration'
+            'exam',
+            'questions',
+            'startTime',
+            'endTime',
+            'startTimestamp',
+            'endTimestamp',
+            'duration'
         ));
     }
 
     public function submit(Request $request, Exam $exam)
     {
         $score = 0;
-        $questions = $exam->questions;
+        $questions = $exam->questions()->get();
 
         // Tính điểm và thu thập dữ liệu câu trả lời
         $answers = [];
