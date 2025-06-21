@@ -9,6 +9,7 @@ use App\Models\Revenue;
 use Carbon\Carbon;
 use App\Models\Exam;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
 {
@@ -31,6 +32,10 @@ class AdminController extends Controller
             ->get();
 
         $totalExams = Exam::count();
+
+        $user = Auth::user();
+
+        abort_unless($user->isAdmin(), 403);
 
         return view('admin.dashboard', compact(
             'totalUsers',

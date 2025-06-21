@@ -5,9 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ExamController;
-use App\Http\Controllers\SubjectController;
 use Illuminate\Support\Facades\Auth;
-use App\Models\User;
 
 // Trang chủ (danh sách đề thi)
 Route::get('/', [ExamController::class, 'index'])->name('home');
@@ -63,7 +61,7 @@ Route::get('/exam/history', [ExamController::class, 'history'])->name('exam.hist
 
 Route::get('/exam/result/{id}', [ExamController::class, 'viewResult'])->name('exam.result.detail');
 
-
+Route::get('/exams/{exam}/retake', [ExamController::class, 'retake'])->name('exams.retake');
 
 // Route auth mặc định
 require __DIR__.'/auth.php';

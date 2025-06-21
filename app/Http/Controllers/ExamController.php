@@ -146,6 +146,12 @@ class ExamController extends Controller
         ));
     }
 
+    public function retake(Exam $exam)
+    {
+        session()->forget("exam_start_time_{$exam->id}");
+        return redirect()->route('exams.take', $exam->id);
+    }
+
     public function submit(Request $request, Exam $exam)
     {
         $score = 0;

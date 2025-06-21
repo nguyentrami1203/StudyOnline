@@ -11,8 +11,8 @@
         <table class="min-w-full bg-white shadow rounded-lg">
             <thead class="bg-gray-100 text-gray-700 text-left">
                 <tr>
-                    <th class="py-3 px-4">Mã đề</th>
                     <th class="py-3 px-4">Tên bài</th>
+                    <th class="py-3 px-4">Loại đề thi</th>
                     <th class="py-3 px-4">Điểm</th>
                     <th class="py-3 px-4">Tỷ lệ (%)</th>
                     <th class="py-3 px-4">Thời gian</th>
@@ -22,8 +22,8 @@
             <tbody class="text-gray-600">
                 @foreach($results as $result)
                 <tr class="border-b hover:bg-gray-50">
-                    <td class="py-2 px-4">{{ $result->exam->exam_code }}</td>
-                    <td class="py-2 px-4">{{ $result->exam->title ?? '---' }}</td>
+                    <td class="py-2 px-4">{{ $result->exam->subject->subject_name }} - Đề #{{ $result->exam->id }} </td>
+                    <td class="py-2 px-4">{{ $result->exam->level }}</td>
                     <td class="py-2 px-4">{{ $result->score }} / {{ $result->total }}</td>
                     @php
                         $color = $result->percentage >= 80 ? 'text-green-600' : ($result->percentage >= 50 ? 'text-yellow-600' : 'text-red-600');
