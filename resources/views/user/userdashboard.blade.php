@@ -4,6 +4,15 @@
 @section('title', 'Trang người dùng')
 
 @section('custom_css')
+<style>
+    @keyframes spin-slow {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+    .animate-spin-slow {
+        animation: spin-slow 6s linear infinite;
+    }
+</style>
 @endsection
 
 @section('content')
@@ -26,7 +35,8 @@
             <ul>
                 <li><a href="#"><i class="icon">📄</i> Đề thi</a></li>
                 <li><a href="#"><i class="icon">🏫</i> Lớp học tập</a></li>  
-                <li><form action="{{ route('logout') }}" method="POST" style="display: inline;">
+                <li>
+                    <form action="{{ route('logout') }}" method="POST" style="display: inline;">
                         @csrf
                         <button type="submit" style="background: none; border: none; color:black; cursor: pointer;">
                             <i class="icon">🚪</i> Đăng xuất
@@ -43,18 +53,36 @@
         <p>Chào mừng bạn đến với trang cá nhân.</p>
 
         <div class="exam-list">
-            <div class="exam-grid">
-                @foreach($exams as $exam)
-                    <div class="exam-card">
-                        <img src="{{ asset('Images/artthi.png') }}" alt="exam image">
-                        <div class="exam-info">
-                            <h4>Thi thử trắc nghiệm ôn tập môn {{ $exam->subject->subject_name }} - Đề #{{ $exam->id }}</h4>
-                            <p>Đề số :{{ $exam->id }}| Môn :{{ $exam->subject->subject_name }} | Thời gian: {{ $exam->duration_minutes }} phút</p>
-                            <a href="{{ route('exams.take', $exam->id) }}" class="btn btn-primary">Làm bài</a>
+            <div class="flex justify-center">
+                <div class="max-w-4xl w-full px-4 flex flex-col items-center gap-6">
+
+                    {{-- Thay ảnh bằng emoji và hiệu ứng --}}
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                        <div class="flex flex-col items-center p-4 bg-indigo-50 rounded-xl shadow hover:scale-105 transition-transform duration-300">
+                            <div class="text-6xl animate-pulse">🧠</div>
+                            <p class="mt-3 text-sm text-indigo-700 font-medium">Luyện tập mỗi ngày giúp bạn tiến bộ</p>
+                        </div>
+                        <div class="flex flex-col items-center p-4 bg-pink-50 rounded-xl shadow hover:scale-105 transition-transform duration-300">
+                            <div class="text-6xl animate-bounce">🔑</div>
+                            <p class="mt-3 text-sm text-pink-700 font-medium">Kiên trì là chìa khóa thành công</p>
+                        </div>
+                        <div class="flex flex-col items-center p-4 bg-yellow-50 rounded-xl shadow hover:scale-105 transition-transform duration-300">
+                            <div class="text-6xl animate-spin-slow">🎉</div>
+                            <p class="mt-3 text-sm text-yellow-700 font-medium">Học mà chơi, chơi mà học</p>
                         </div>
                     </div>
-                @endforeach
+
+                    {{-- Tiêu đề và mô tả --}}
+                    <div class="text-center mt-6">
+                        <h2 class="text-2xl md:text-3xl font-bold text-indigo-700 mb-3">📖 Học tập thật vui!</h2>
+                        <p class="text-gray-600 text-base md:text-lg">
+                            Đây là không gian học tập sáng tạo và thú vị. Hãy chuẩn bị tinh thần cho những thử thách mới nhé! ✨
+                        </p>
+                    </div>
+
+                </div>
             </div>
         </div>
+    </div>
 </div>
 @endsection

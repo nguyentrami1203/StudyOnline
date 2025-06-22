@@ -44,7 +44,7 @@
                 <div class="exam-card">
                     <img src="{{ asset('Images/artthi.png') }}" alt="Exam image">
                     <div class="exam-info">
-                        <h5>Thi thử trắc nghiệm ôn tập môn {{ $subject['subject_name'] }} - Đề #{{ $index + 1 }}</h5>
+                        <h5>Thi thử trắc nghiệm ôn tập môn {{ $subject['subject_name'] }} - Đề #{{ $exam->id }}</h5>
                         <p>Đề số {{ $exam->id }} với thời gian làm bài {{ $exam->duration_minutes }} phút.</p>
                         <a href="{{ route('login') }}" class="btn">Làm bài</a>
                     </div>
