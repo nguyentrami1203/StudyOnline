@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Exam; // THÊM DÒNG NÀY để gọi model Exam
 
 class UserController extends Controller

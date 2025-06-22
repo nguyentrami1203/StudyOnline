@@ -49,6 +49,12 @@ class ExamController extends Controller
         //
     }
 
+    public function showDetailExam($id)
+    {
+        $exam = \App\Models\Exam::with('subject', 'questions')->findOrFail($id);
+        return view('exams.exam_detail', compact('exam'));
+    }
+
     /**
      * Display the specified resource.
      */
@@ -87,6 +93,24 @@ class ExamController extends Controller
     {
         //
     }
+
+    public function list(Request $request)
+    {
+        $subjectId = $request->query('subject');
+
+        $subjects = \App\Models\Subject::all();
+
+        $exams = \App\Models\Exam::with('subject')
+            ->when($subjectId, function ($query, $subjectId) {
+                return $query->where('subject_id', $subjectId);
+            })
+            ->latest()
+            ->paginate(10)
+            ->withQueryString();
+
+        return view('exams.list_exam', compact('exams', 'subjects', 'subjectId'));
+    }
+
 
     public function history()
     {
@@ -192,7 +216,7 @@ class ExamController extends Controller
             ]);
         }
 
-        return view('exams.result', compact('score', 'questions', 'percentage'));
+        return view('exams.result', compact('exam', 'score', 'questions', 'percentage'));
     }
 
 }

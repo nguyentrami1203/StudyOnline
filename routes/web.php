@@ -50,6 +50,8 @@ Route::middleware('auth')->group(function () {
 // Hiển thị chi tiết 1 đề thi (dùng để xử lý nút "Làm bài")
 Route::get('/exams/{exam}', [ExamController::class, 'show'])->name('exams.show');
 
+Route::get('/exams/detail/{exam}', [ExamController::class, 'showDetailExam'])->name('exams.showDetailExam');
+
 // Giao diện làm bài thi
 Route::get('/exams/{exam}/take', [ExamController::class, 'take'])->name('exams.take');
 
@@ -63,5 +65,6 @@ Route::get('/exam/result/{id}', [ExamController::class, 'viewResult'])->name('ex
 
 Route::get('/exams/{exam}/retake', [ExamController::class, 'retake'])->name('exams.retake');
 
+Route::get('/exam/list', [ExamController::class, 'list'])->name('exam.list');
 // Route auth mặc định
 require __DIR__.'/auth.php';
