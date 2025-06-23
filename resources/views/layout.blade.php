@@ -9,14 +9,14 @@
 <body>
     <header>
         <div class = "container1">
-           <img src="Images\test.png" alt="Logo">
+           <a href="{{ url('/') }}"><img src="Images\test.png" alt="Logo"></a>
            <div class = "menu">
             <nav>
                 <ul>
-                    <li><a href="">Tính năng</a></li>
-                    <li><a href="">Tạo đề</a></li>
-                    <li><a href="">Bảng giá</a></li>
-                    <li><a href="">Liên hệ</a></li>
+                    <li><a href="{{ url('/tính_năng') }}">Tính năng</a></li>
+                    <li><a href="{{ route('login') }}">Tạo đề</a></li>
+                    <li><a href="{{ route('price') }}">Bảng giá</a></li>
+                    <li><a href="{{ route('contact') }}">Liên hệ</a></li>
                     <li><a href="http://localhost/StudyOnline/public/login" class="btn">Đăng nhập</a></li>
                 </ul>
            </nav>

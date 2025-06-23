@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ExamController;
+use App\Http\Controllers\PriceController;
+use App\Http\Controllers\ContactController;
 use Illuminate\Support\Facades\Auth;
 
 // Trang chủ (danh sách đề thi)
@@ -66,5 +68,21 @@ Route::get('/exam/result/{id}', [ExamController::class, 'viewResult'])->name('ex
 Route::get('/exams/{exam}/retake', [ExamController::class, 'retake'])->name('exams.retake');
 
 Route::get('/exam/list', [ExamController::class, 'list'])->name('exam.list');
+
+Route::get('/tao-de', [ExamController::class, 'create'])->name('exams.create');
+Route::post('/luu-de', [ExamController::class, 'store'])->name('exam.store');
+
+Route::get('/quan-ly/de-thi-cua-toi', [ExamController::class, 'myExams'])->name('exams.my')->middleware('auth');
+
+Route::get('/exams/{id}/edit-questions', [ExamController::class, 'editQuestions'])->name('exams.edit');
+Route::put('exams/{exam}/update-questions', [ExamController::class, 'updateQuestions'])->name('exams.update_questions');
+Route::delete('/exams/{examId}/questions/{questionId}', [ExamController::class, 'deleteQuestion'])->name('questions.detach');
+Route::delete('/exams/{id}', [ExamController::class, 'destroy'])->name('exams.destroy');
+Route::get('/bang-gia', [PriceController::class, 'price'])->name('price');
+Route::get('/tính_năng', function () {return view('tính_năng');});
+Route::get('/lien-he', function () {
+    return view('contact'); // resources/views/contact.blade.php
+})->name('contact');
+Route::post('/lien-he', [ContactController::class, 'submitcontact'])->name('contact');
 // Route auth mặc định
 require __DIR__.'/auth.php';

@@ -12,13 +12,9 @@
         <div class="logo">
             <img src="{{ asset('Images/test.png') }}" alt="Logo" class="logo-img">
         </div>
-        <div class="search-bar">
-            <input type="text" placeholder="Tìm kiếm đề thi">
-        </div>
         <div class="user-info">
-            <button class="btn-error">❌ Báo lỗi</button>
-            <a href=""><button class="btn-create">➕ Tạo đề thi</button></a>
-            <img src="{{ asset('Images/avatar.png') }}" alt="Avatar" class="avatar">
+            <a href="{{ route('exams.create') }}"><button class="btn-create">➕ Tạo đề thi</button></a>
+            <img src="{{ asset('Images/avarta.jpg') }}" alt="Avatar" class="avatar">
         </div>
     </header>
     
@@ -39,4 +35,3 @@
  </html>
 
 <!-- FOOTER -->
-

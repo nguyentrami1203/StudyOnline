@@ -9,6 +9,7 @@ use App\Models\ExamResult;
 use App\Models\Subject;
 use Illuminate\Support\Facades\Auth;
 use App\Models\ExamAnswer;
+use Illuminate\Support\Facades\DB;
 
 class ExamController extends Controller
 {
@@ -38,7 +39,7 @@ class ExamController extends Controller
      */
     public function create()
     {
-        //
+        return view('exams.create');
     }
 
     /**
@@ -46,7 +47,39 @@ class ExamController extends Controller
      */
     public function store(Request $request)
     {
-        //
+         // Xử lý lưu đề thi và các câu hỏi
+            $exam = new Exam();
+            $exam->subject_id = $request->subject_id;
+            $exam->exam_code = $request->exam_code;
+            $exam->level = $request->level;
+            $exam->duration_minutes = $request->duration_minutes;
+            $exam->user_id = Auth::id();
+            $exam->save();
+
+        foreach ($request->questions as $index => $q) {
+            DB::table('questions')->insert([
+                'exam_id' => $exam->id,
+                'question_order' => $index + 1,
+                'content' => $q['content'],
+                'option_a' => $q['a'],
+                'option_b' => $q['b'],
+                'option_c' => $q['c'],
+                'option_d' => $q['d'],
+                'correct_answer' => $q['correct'],
+                'created_at' => now(),
+                'updated_at' => now()
+            ]);
+        }
+        return redirect()->route('exams.my')->with('success', 'Đề thi đã được lưu!');
+    }
+
+    public function myExams()
+    {
+        $exams = Exam::with('subject')
+            ->where('user_id', Auth::id())
+            ->latest()
+            ->get(); 
+        return view('exams.my', compact('exams'));
     }
 
     public function showDetailExam($id)
@@ -73,25 +106,89 @@ class ExamController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function editQuestions($id)
     {
-        //
+        $exam = Exam::with('questions')->findOrFail($id);
+        return view('exams.edit', compact('exam'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function updateQuestions(Request $request, $id)
     {
-        //
+        $exam = Exam::findOrFail($id);
+
+        // Cập nhật thông tin đề thi nếu cần
+        $exam->exam_code = $request->exam_code;
+        $exam->level = $request->level;
+        $exam->duration_minutes = $request->duration_minutes;
+        $exam->save();
+
+        // Cập nhật các câu hỏi hiện có
+        foreach ($request->existing_questions as $qid => $data) {
+            DB::table('questions')->where('id', $qid)->update([
+                'content' => $data['content'],
+                'option_a' => $data['a'],
+                'option_b' => $data['b'],
+                'option_c' => $data['c'],
+                'option_d' => $data['d'],
+                'correct_answer' => $data['correct'],
+                'updated_at' => now()
+            ]);
+        }
+
+        // Thêm câu hỏi mới nếu có
+        if ($request->filled('new_questions')) {
+            foreach ($request->new_questions as $index => $q) {
+                DB::table('questions')->insert([
+                    'exam_id' => $exam->id,
+                    'question_order' => $index + 1,
+                    'content' => $q['content'],
+                    'option_a' => $q['a'],
+                    'option_b' => $q['b'],
+                    'option_c' => $q['c'],
+                    'option_d' => $q['d'],
+                    'correct_answer' => $q['correct'],
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ]);
+            }
+        }
+
+        return redirect()->route('exams.my')->with('success', 'Cập nhật đề thi thành công.');
     }
 
+    public function deleteQuestion($examId, $questionId)
+    {
+        $question = DB::table('questions')
+            ->where('id', $questionId)
+            ->where('exam_id', $examId)
+            ->first();
+
+        if (!$question) {
+            return redirect()->back()->with('error', 'Không tìm thấy câu hỏi.');
+        }
+
+        DB::table('questions')->where('id', $questionId)->delete();
+
+        return redirect()->back()->with('success', 'Đã xoá câu hỏi thành công.');
+    }
+
+    
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
     {
-        //
+        $exam = Exam::findOrFail($id);
+
+        // Nếu có quan hệ với câu hỏi, hãy xoá luôn
+        $exam->questions()->delete();
+
+        $exam->delete();
+
+        return redirect()->route('exams.my')->with('success', 'Đã xoá đề thi thành công.');
     }
 
     public function list(Request $request)

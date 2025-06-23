@@ -23,18 +23,14 @@
             <div class="menu-title">👤 Cá nhân</div>
             <ul>
                 <li><a href="{{ route('exam.list') }}"><i class="icon">🧭</i> Khám phá đề thi</a></li>
-                <li><a href="#"><i class="icon">🏠</i> Thư viện của tôi</a></li>
-                <li><a href="#"><i class="icon">⏱</i> Truy cập gần đây</a></li>
                 <li><a href="{{ route('exam.history') }}"><i class="icon">📝</i> Kết quả thi của tôi</a></li>
-                <li><a href="#"><i class="icon">🏅</i> BXH thi đua <span style="color: orange;">🔥</span></a></li>
             </ul>
         </div>
 
         <div class="menu-group">
             <div class="menu-title">🎓 Quản lý</div>
             <ul>
-                <li><a href="#"><i class="icon">📄</i> Đề thi</a></li>
-                <li><a href="#"><i class="icon">🏫</i> Lớp học tập</a></li>  
+                <li><a href="{{ route('exams.my') }}"><i class="icon">📄</i> Đề thi</a></li>  
                 <li>
                     <form action="{{ route('logout') }}" method="POST" style="display: inline;">
                         @csrf
@@ -56,7 +52,6 @@
             <div class="flex justify-center">
                 <div class="max-w-4xl w-full px-4 flex flex-col items-center gap-6">
 
-                    {{-- Thay ảnh bằng emoji và hiệu ứng --}}
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                         <div class="flex flex-col items-center p-4 bg-indigo-50 rounded-xl shadow hover:scale-105 transition-transform duration-300">
                             <div class="text-6xl animate-pulse">🧠</div>
@@ -72,7 +67,6 @@
                         </div>
                     </div>
 
-                    {{-- Tiêu đề và mô tả --}}
                     <div class="text-center mt-6">
                         <h2 class="text-2xl md:text-3xl font-bold text-indigo-700 mb-3">📖 Học tập thật vui!</h2>
                         <p class="text-gray-600 text-base md:text-lg">

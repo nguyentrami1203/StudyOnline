@@ -16,10 +16,10 @@ class AdminController extends Controller
         $totalUsers = User::count();
 
         $onlineUsers = DB::table('sessions')
-        ->where('last_activity', '>=', Carbon::now()->subMinutes(5)->timestamp)
-        ->pluck('user_id')
-        ->unique()
-        ->count();
+            ->where('last_activity', '>=', Carbon::now()->subMinutes(5)->timestamp)
+            ->pluck('user_id')
+            ->unique()
+            ->count();
 
         $paidUsers = PaidService::distinct('user_id')->count('user_id');
 
@@ -31,8 +31,12 @@ class AdminController extends Controller
 
         $totalExams = Exam::count();
 
-        $user = Auth::user();
+        $exams = Exam::withCount('questions')
+            ->orderBy('created_at', 'desc')
+            ->take(10)
+            ->get();
 
+        $user = Auth::user();
         abort_unless($user->isAdmin(), 403);
 
         return view('admin.dashboard', compact(
@@ -40,9 +44,11 @@ class AdminController extends Controller
             'onlineUsers',
             'paidUsers',
             'revenueByQuarter',
-            'totalExams'
+            'totalExams',
+            'exams' 
         ));
     }
+
 }
 
 
